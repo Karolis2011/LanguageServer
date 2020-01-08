@@ -1,34 +1,35 @@
-﻿using LanguageServer.RuntimeState;
+﻿using JavaScriptEngineSwitcher.ChakraCore;
+using LanguageServer.RuntimeState;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using V8.Net;
 
 namespace LanguageServer.Services
 {
-    public class V8RuntimeService
+    public class ChakraRuntimeService
     {
 
-        Dictionary<int, V8Program> programs = new Dictionary<int, V8Program>();
+        Dictionary<int, ChakraProgram> programs = new Dictionary<int, ChakraProgram>();
         
-        public V8RuntimeService()
+        public ChakraRuntimeService()
         {
         }
 
-        public V8Engine GetEngine() =>
-            new V8Engine();
+        public ChakraCoreJsEngine GetEngine() =>
+            new ChakraCoreJsEngine(new ChakraCoreSettings() {
+            });
 
 
-        public V8Program CreateProgram()
+        public ChakraProgram CreateProgram()
         {
-            var newProgram = new V8Program(this);
+            var newProgram = new ChakraProgram(this);
             newProgram.Id = GetAvaivableId();
             programs.Add(newProgram.Id, newProgram);
             return newProgram;
         }
 
-        public V8Program GetProgram(int id)
+        public ChakraProgram GetProgram(int id)
         {
             return programs.GetValueOrDefault(id);
         }

@@ -11,11 +11,11 @@ namespace LanguageServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class V8Controller : ControllerBase
+    public class ChakraController : ControllerBase
     {
-        V8RuntimeService runtimeService;
+        ChakraRuntimeService runtimeService;
 
-        public V8Controller(V8RuntimeService _r)
+        public ChakraController(ChakraRuntimeService _r)
         {
             runtimeService = _r;
         }
@@ -25,15 +25,15 @@ namespace LanguageServer.Controllers
         [HttpGet("Version")]
         public object Version()
         {
-            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(typeof(V8.Net.V8Engine).Assembly.Location);
-            FileVersionInfo fvi2 = FileVersionInfo.GetVersionInfo(typeof(V8Controller).Assembly.Location);
-            var v8ver = V8.Net.V8Engine.Version;
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(typeof(JavaScriptEngineSwitcher.ChakraCore.ChakraCoreJsEngine).Assembly.Location);
+            FileVersionInfo fvi2 = FileVersionInfo.GetVersionInfo(typeof(ChakraController).Assembly.Location);
+            var ver = new JavaScriptEngineSwitcher.ChakraCore.ChakraCoreJsEngine().Version;
             return new
             {
-                Message = $"NTSLv3 running V8 {null}",
+                Message = $"NTSLv3 running ChakraCore {ver}",
                 Version = 3,
                 ServerVersion = fvi2.FileVersion,
-                V8Version = v8ver,
+                ChakraCoreVersion = ver,
                 WraperVersion = fvi.FileVersion
             };
         }

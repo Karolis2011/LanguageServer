@@ -28,7 +28,7 @@ namespace LanguageServer
             services.AddControllers();
             services.AddSingleton<JintRuntimeService>();
             services.AddSingleton<CSV8RuntimeService>();
-            services.AddSingleton<V8RuntimeService>();
+            services.AddSingleton<ChakraRuntimeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

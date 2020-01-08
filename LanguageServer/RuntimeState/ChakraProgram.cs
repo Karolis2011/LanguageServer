@@ -1,19 +1,19 @@
-﻿using LanguageServer.Services;
+﻿using JavaScriptEngineSwitcher.ChakraCore;
+using LanguageServer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using V8.Net;
 
 namespace LanguageServer.RuntimeState
 {
-    public class V8Program
+    public class ChakraProgram
     {
-        V8Engine engine;
+        ChakraCoreJsEngine engine;
         public int Id { get; set; }
         public string ConsoleBuffer { get; protected set; } = "";
 
-        public V8Program(V8RuntimeService service)
+        public ChakraProgram(ChakraRuntimeService service)
         {
             engine = service.GetEngine();
             InstallExtensions();
@@ -21,16 +21,14 @@ namespace LanguageServer.RuntimeState
 
         public void InstallExtensions()
         {
-            //engine.CreateFunctionTemplate().
-            //engine.GlobalObject.SetProperty()
-            //engine.DynamicGlobalObject.__cb_log = new Action<object>(LogCB);
+            engine.EmbedHostObject("__cb_log", new Action<object>(LogCB));
         }
 
         public void Execute(string source)
         {
             try
             {
-                engine.Execute(source ,"", true, 2);
+                engine.TimedExecute(new TimeSpan(0, 0, 1), source);
             }
             catch (Exception ex)
             {

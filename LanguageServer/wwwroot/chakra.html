@@ -29,7 +29,7 @@
 		
 		function get_version() {
 			$.ajax({
-				url: "/api/v8/version",
+				url: "/api/chakra/version",
 				dataType: "json",
 				success: (data) => {
 					$("#version").text(data.message)
@@ -43,7 +43,7 @@
 				return;
 			$.ajax({
 				type: "POST",
-				url: "/api/v8/new",
+				url: "/api/chakra/new",
 				dataType: "json",
 				success: (data) => {
 					$("#version").text(data.message)
@@ -58,7 +58,7 @@
 				return;
 			$.ajax({
 				type: "get",
-				url: `/api/v8/${programId}`,
+				url: `/api/chakra/${programId}`,
 				dataType: "json",
 				success: (data) => {
 					$("#version").text(data.message)
@@ -74,7 +74,7 @@
 				return;
 			$.ajax({
 				type: "post",
-				url: `/api/v8/${programId}/exec`,
+				url: `/api/chakra/${programId}/exec`,
 				dataType: "json",
 				data: {
 					code: $("#source").val()
@@ -92,7 +92,7 @@
 				return;
 			$.ajax({
 				type: "post",
-				url: `/api/v8/${programId}/delete`,
+				url: `/api/chakra/${programId}/delete`,
 				dataType: "json",
 				success: (data) => {
 					$("#version").text(data.message)
