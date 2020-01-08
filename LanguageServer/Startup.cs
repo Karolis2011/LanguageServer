@@ -27,6 +27,7 @@ namespace LanguageServer
         {
             services.AddControllers();
             services.AddSingleton<JintRuntimeService>();
+            services.AddSingleton<V8RuntimeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +42,7 @@ namespace LanguageServer
 
             app.UseAuthorization();
 
-            app.UseStaticFiles();
+            app.UseFileServer();
 
             app.UseEndpoints(endpoints =>
             {

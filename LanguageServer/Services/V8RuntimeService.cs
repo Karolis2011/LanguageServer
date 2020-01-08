@@ -1,4 +1,6 @@
 ﻿using Jint;
+using LanguageServer.RuntimeState;
+using Microsoft.ClearScript.V8;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,32 +8,28 @@ using System.Threading.Tasks;
 
 namespace LanguageServer.Services
 {
-    public class JintRuntimeService
+    public class V8RuntimeService
     {
 
-        Dictionary<int, RuntimeState.JintProgram> programs = new Dictionary<int, RuntimeState.JintProgram>();
+        Dictionary<int, V8Program> programs = new Dictionary<int, V8Program>();
         
-        public JintRuntimeService()
+        public V8RuntimeService()
         {
-            
         }
 
-        public Engine GetEngine() =>
-            new Engine(o => o
-            .LimitRecursion(25)
-            .MaxStatements(1000)
-            .TimeoutInterval(new TimeSpan(0, 0, 2))
-        );
+        public V8ScriptEngine GetEngine() =>
+            new V8ScriptEngine();
 
-        public RuntimeState.JintProgram CreateProgram()
+
+        public V8Program CreateProgram()
         {
-            var newProgram = new RuntimeState.JintProgram(this);
+            var newProgram = new V8Program(this);
             newProgram.Id = GetAvaivableId();
             programs.Add(newProgram.Id, newProgram);
             return newProgram;
         }
 
-        public RuntimeState.JintProgram GetProgram(int id)
+        public V8Program GetProgram(int id)
         {
             return programs.GetValueOrDefault(id);
         }

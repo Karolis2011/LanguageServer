@@ -1,46 +1,46 @@
-﻿using Jint;
-using LanguageServer.Services;
+﻿using LanguageServer.Services;
+using Microsoft.ClearScript.V8;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LanguageServer.JintState
+namespace LanguageServer.RuntimeState
 {
-    public class Program
+    public class V8Program
     {
-        Engine mainEngine;
+        V8ScriptEngine engine;
         public int Id { get; set; }
         public string ConsoleBuffer { get; protected set; } = "";
 
-        public Program(JintRuntimeService service)
+        public V8Program(V8RuntimeService service)
         {
-            mainEngine = service.GetEngine();
+            engine = service.GetEngine();
+            //mainEngine = service.GetEngine();
             InstallExtensions();
         }
 
         public void InstallExtensions()
         {
-            mainEngine.SetValue("__cb_log", new Action<object>(LogCB));
+            engine.AddHostObject("__cb_log", new Action<object>(LogCB));
         }
 
         public void Execute(string source)
         {
             try
             {
-                mainEngine.Execute(source);
+                engine.Execute(source);
             }
             catch (Exception ex)
             {
                 LogCB(ex);
             }
-            
+
         }
 
         private void LogCB(object o)
         {
             ConsoleBuffer += $"{o}\r\n";
         }
-
     }
 }
