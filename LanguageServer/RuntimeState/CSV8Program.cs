@@ -1,36 +1,35 @@
 ﻿using LanguageServer.Services;
+using Microsoft.ClearScript.V8;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using V8.Net;
 
 namespace LanguageServer.RuntimeState
 {
-    public class V8Program
+    public class CSV8Program
     {
-        V8Engine engine;
+        V8ScriptEngine engine;
         public int Id { get; set; }
         public string ConsoleBuffer { get; protected set; } = "";
 
-        public V8Program(V8RuntimeService service)
+        public CSV8Program(CSV8RuntimeService service)
         {
             engine = service.GetEngine();
+            //mainEngine = service.GetEngine();
             InstallExtensions();
         }
 
         public void InstallExtensions()
         {
-            //engine.CreateFunctionTemplate().
-            //engine.GlobalObject.SetProperty()
-            //engine.DynamicGlobalObject.__cb_log = new Action<object>(LogCB);
+            engine.AddHostObject("__cb_log", new Action<object>(LogCB));
         }
 
         public void Execute(string source)
         {
             try
             {
-                engine.Execute(source ,"", true, 2);
+                engine.Execute(source);
             }
             catch (Exception ex)
             {

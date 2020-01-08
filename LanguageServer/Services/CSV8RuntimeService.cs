@@ -1,34 +1,35 @@
-﻿using LanguageServer.RuntimeState;
+﻿using Jint;
+using LanguageServer.RuntimeState;
+using Microsoft.ClearScript.V8;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using V8.Net;
 
 namespace LanguageServer.Services
 {
-    public class V8RuntimeService
+    public class CSV8RuntimeService
     {
 
-        Dictionary<int, V8Program> programs = new Dictionary<int, V8Program>();
+        Dictionary<int, CSV8Program> programs = new Dictionary<int, CSV8Program>();
         
-        public V8RuntimeService()
+        public CSV8RuntimeService()
         {
         }
 
-        public V8Engine GetEngine() =>
-            new V8Engine();
+        public V8ScriptEngine GetEngine() =>
+            new V8ScriptEngine();
 
 
-        public V8Program CreateProgram()
+        public CSV8Program CreateProgram()
         {
-            var newProgram = new V8Program(this);
+            var newProgram = new CSV8Program(this);
             newProgram.Id = GetAvaivableId();
             programs.Add(newProgram.Id, newProgram);
             return newProgram;
         }
 
-        public V8Program GetProgram(int id)
+        public CSV8Program GetProgram(int id)
         {
             return programs.GetValueOrDefault(id);
         }

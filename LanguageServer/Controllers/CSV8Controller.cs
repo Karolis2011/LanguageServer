@@ -11,11 +11,11 @@ namespace LanguageServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class V8Controller : ControllerBase
+    public class CSV8Controller : ControllerBase
     {
-        V8RuntimeService runtimeService;
+        CSV8RuntimeService runtimeService;
 
-        public V8Controller(V8RuntimeService _r)
+        public CSV8Controller(CSV8RuntimeService _r)
         {
             runtimeService = _r;
         }
@@ -25,15 +25,15 @@ namespace LanguageServer.Controllers
         [HttpGet("Version")]
         public object Version()
         {
-            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(typeof(V8.Net.V8Engine).Assembly.Location);
-            FileVersionInfo fvi2 = FileVersionInfo.GetVersionInfo(typeof(V8Controller).Assembly.Location);
-            var v8ver = V8.Net.V8Engine.Version;
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(typeof(Microsoft.ClearScript.V8.V8ScriptEngine).Assembly.Location);
+            FileVersionInfo fvi2 = FileVersionInfo.GetVersionInfo(typeof(CSV8Controller).Assembly.Location);
+            //var v8ver = Microsoft.ClearScript.V8.V8Runtime
             return new
             {
                 Message = $"NTSLv3 running V8 {null}",
                 Version = 3,
                 ServerVersion = fvi2.FileVersion,
-                V8Version = v8ver,
+                //V8Version = v8ver,
                 WraperVersion = fvi.FileVersion
             };
         }

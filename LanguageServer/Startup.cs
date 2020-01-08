@@ -27,6 +27,7 @@ namespace LanguageServer
         {
             services.AddControllers();
             services.AddSingleton<JintRuntimeService>();
+            services.AddSingleton<CSV8RuntimeService>();
             services.AddSingleton<V8RuntimeService>();
         }
 
