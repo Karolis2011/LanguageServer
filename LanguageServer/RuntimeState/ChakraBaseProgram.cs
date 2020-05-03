@@ -1,5 +1,7 @@
 ﻿using JavaScriptEngineSwitcher.ChakraCore;
+using LanguageServer.JSAPI;
 using LanguageServer.Services;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,21 +9,23 @@ using System.Threading.Tasks;
 
 namespace LanguageServer.RuntimeState
 {
-    public class ChakraProgram
+    public class ChakraBaseProgram
     {
         ChakraCoreJsEngine engine;
         public int Id { get; set; }
-        public string ConsoleBuffer { get; protected set; } = "";
+        public BasicConsoleInterface Console { get; set; }
 
-        public ChakraProgram(ChakraRuntimeService service)
+        public ChakraBaseProgram(ChakraRuntimeService service)
         {
             engine = service.GetEngine();
-            InstallExtensions();
+            Console = new BasicConsoleInterface();
+            InitializeEngine();
         }
 
-        public void InstallExtensions()
+        public void InitializeEngine()
         {
-            engine.EmbedHostObject("__cb_log", new Action<object>(LogCB));
+            // Todo add proper logging
+            engine.EmbedHostObject("Console", Console);
         }
 
         public void Execute(string source)
@@ -32,14 +36,9 @@ namespace LanguageServer.RuntimeState
             }
             catch (Exception ex)
             {
-                LogCB(ex);
+                Console.Log(ex);
             }
 
-        }
-
-        private void LogCB(object o)
-        {
-            ConsoleBuffer += $"{o}\r\n";
         }
     }
 }

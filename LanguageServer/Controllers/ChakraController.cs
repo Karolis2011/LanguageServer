@@ -39,7 +39,7 @@ namespace LanguageServer.Controllers
         }
 
         [HttpPost("New")]
-        public object InitializeProgram()
+        public object InitializeBaseProgram()
         {
             var program = runtimeService.CreateProgram();
             return new

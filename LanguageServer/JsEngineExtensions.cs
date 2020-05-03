@@ -9,8 +9,8 @@ namespace LanguageServer
 {
     public static class JsEngineExtensions
     {
-        public static object TimedEvaluate(this IJsEngine engine, TimeSpan timeout,
-            string expression)
+
+        public static void TimedFn<T>(this T engine, TimeSpan timeout, Action<T> timedEngineAction) where T : IJsEngine
         {
             if (engine.SupportsScriptInterruption)
             {
@@ -20,11 +20,11 @@ namespace LanguageServer
                     {
                         timer.Change(timeout, TimeSpan.FromMilliseconds(Timeout.Infinite));
 
-                        return engine.Evaluate(expression);
+                        timedEngineAction(engine);
                     }
                     catch (JsInterruptedException e)
                     {
-                        throw new TimeoutException("Script execution timed out", e);
+                        throw new TimeoutException("Engine execution timed out", e);
                     }
                 }
             }
@@ -35,8 +35,7 @@ namespace LanguageServer
             }
         }
 
-        public static void TimedExecute(this IJsEngine engine, TimeSpan timeout,
-            string expression)
+        public static R TimedFn<T, R>(this T engine, TimeSpan timeout, Func<T, R> timedEngineAction) where T : IJsEngine
         {
             if (engine.SupportsScriptInterruption)
             {
@@ -46,11 +45,11 @@ namespace LanguageServer
                     {
                         timer.Change(timeout, TimeSpan.FromMilliseconds(Timeout.Infinite));
 
-                        engine.Execute(expression);
+                        return timedEngineAction(engine);
                     }
                     catch (JsInterruptedException e)
                     {
-                        throw new TimeoutException("Script execution timed out", e);
+                        throw new TimeoutException("Engine execution timed out", e);
                     }
                 }
             }
@@ -60,5 +59,10 @@ namespace LanguageServer
                     "'{0}' does not support interruption of the script execution.", engine.Name));
             }
         }
-    }
+
+        public static object TimedEvaluate<T>(this T engine, TimeSpan timeout, string expression) where T : IJsEngine => engine.TimedFn(timeout, (e) => e.Evaluate(expression));
+
+        public static void TimedExecute<T>(this T engine, TimeSpan timeout, string expression) where T : IJsEngine => engine.TimedFn(timeout, (e) => e.Execute(expression));
+
+}
 }

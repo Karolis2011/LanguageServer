@@ -10,7 +10,7 @@ namespace LanguageServer.Services
     public class ChakraRuntimeService
     {
 
-        Dictionary<int, ChakraProgram> programs = new Dictionary<int, ChakraProgram>();
+        Dictionary<int, ChakraBaseProgram> programs = new Dictionary<int, ChakraBaseProgram>();
         
         public ChakraRuntimeService()
         {
@@ -18,18 +18,19 @@ namespace LanguageServer.Services
 
         public ChakraCoreJsEngine GetEngine() =>
             new ChakraCoreJsEngine(new ChakraCoreSettings() {
+                
             });
 
 
-        public ChakraProgram CreateProgram()
+        public ChakraBaseProgram CreateProgram()
         {
-            var newProgram = new ChakraProgram(this);
+            var newProgram = new ChakraBaseProgram(this);
             newProgram.Id = GetAvaivableId();
             programs.Add(newProgram.Id, newProgram);
             return newProgram;
         }
 
-        public ChakraProgram GetProgram(int id)
+        public ChakraBaseProgram GetProgram(int id)
         {
             return programs.GetValueOrDefault(id);
         }
